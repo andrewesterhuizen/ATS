@@ -1,0 +1,16 @@
+#ifndef PIN_DEFINES_H
+#define PIN_DEFINES_H
+
+#define CLOCK_PORT PORTB
+#define CLOCK_DATA_DIRECTION DDRB
+
+#define LED_PORT PORTD
+#define LED_DATA_DIRECTION DDRD
+
+#define TAP_INPUT_PIN 6
+
+#define BPM_POT_INPUT_PIN 0
+#define FUNC_A_POT_INPUT_PIN 1
+#define FUNC_B_POT_INPUT_PIN 2
+
+#endif // PIN_DEFINES_H
