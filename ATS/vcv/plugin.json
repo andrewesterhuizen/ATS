@@ -1,0 +1,23 @@
+{
+  "slug": "ATS",
+  "name": "ATS",
+  "version": "1.0.0",
+  "license": "proprietary",
+  "brand": "CAS",
+  "author": "Andrew Esterhuizen",
+  "authorEmail": "ae@computationalaudiosystems.com",
+  "authorUrl": "",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "ATS",
+      "name": "ATS",
+      "description": "",
+      "tags": []
+    }
+  ]
+}
