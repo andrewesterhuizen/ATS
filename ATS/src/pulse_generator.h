@@ -1,5 +1,4 @@
-#ifndef PULSE_GENERATOR_H
-#define PULSE_GENERATOR_H
+#pragma once
 
 #include <stdint.h>
 #include "defines.h"
@@ -12,6 +11,7 @@ private:
     uint8_t _pulseLengthSamples = (SAMPLE_RATE / 1000) * _pulseLengthMs;
 
 public:
+    bool isActive();
     bool update();
     void trigger();
 };
@@ -35,4 +35,7 @@ bool PulseGenerator::update()
     return false;
 }
 
-#endif // PULSE_GENERATOR_H
+bool PulseGenerator::isActive()
+{
+    return _remaining > 0;
+}

@@ -14,7 +14,7 @@ public:
 void ADC8::init()
 {
     ADMUX |= (1 << REFS0);                                // reference voltage on AVCC
-    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); //clock prescaler /128
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // clock prescaler /128
     ADCSRA |= (1 << ADEN);                                // enable adc
     ADMUX |= (1 << ADLAR);                                // left align, for 8 bit mode
 }

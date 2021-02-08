@@ -1,0 +1,15 @@
+// set bit: |= 1 << position
+// unset bit: &= ~(1 << position)
+// toggle bit: ^= 1 << position
+// read bit: REGISTER & (1 << position)
+
+
+// (beats per second) =  (beats per minute) / 60
+// (seconds per beat) = 1 / (beats per second)
+
+// (samples per beat) = (samples per second: sample rate) / (beats per second)
+
+// (ms per beat) = (1000: ms in a second) / bps
+// (ms per beat) = (60000: ms in a minute) / bpm
+
+// (samples per ms) = (samples per second: sample rate) / (ms in a second: 1000)

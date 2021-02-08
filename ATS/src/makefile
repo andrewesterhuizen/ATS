@@ -5,6 +5,7 @@ PROGRAMMER = usbasp
 BAUD       = 115200
 COMPILE    = avr-gcc -Wall -Os -mmcu=$(DEVICE)
 
+# fuses = (E:FF, H:D9, L:F7)
 
 default: compile upload clean
 
@@ -15,7 +16,7 @@ compile:
 	avr-size --format=avr --mcu=$(DEVICE) $(FILENAME).elf
 
 upload:
-	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
+	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -s -U flash:w:$(FILENAME).hex
 
 clean:
 	rm $(FILENAME).o
