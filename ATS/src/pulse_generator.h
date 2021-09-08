@@ -7,7 +7,7 @@ class PulseGenerator
 {
 private:
     uint8_t _remaining = 0;
-    uint8_t _pulseLengthMs = 10;
+    uint8_t _pulseLengthMs = 100;
     uint8_t _pulseLengthSamples = (SAMPLE_RATE / 1000) * _pulseLengthMs;
 
 public:

@@ -8,6 +8,7 @@
 #include "./module.h"
 #include "./ui.h"
 #include "./output_handler.h"
+#include "./util.h"
 
 // not sure why this fixes my issue
 extern "C" void __cxa_pure_virtual()
@@ -123,10 +124,34 @@ int main()
             switch (event.input)
             {
             case InputX:
-                m.setX(event.value);
+                if (event.shift)
+                {
+                    timerManager.setBPM(event.value);
+                }
+                else
+                {
+                    m.setX(event.value);
+                }
                 break;
             case InputY:
-                m.setY(event.value);
+                if (event.shift)
+                {
+                    uint8_t engineIndex = (event.value * NUM_ENGINES) / 255;
+                    m.setEngine(engineIndex);
+                }
+                else
+                {
+                    m.setY(event.value);
+                }
+                break;
+            case ButtonRelease:
+                if (event.value > 0)
+                {
+                    uint16_t newBPM = MS_IN_MINUTE / event.value;
+                    uint8_t bpm = clamp(newBPM);
+                    timerManager.setBPM(bpm);
+                }
+
                 break;
             }
         }

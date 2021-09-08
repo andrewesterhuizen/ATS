@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-template <class T>
+template <typename T>
 class Queue
 {
 public:

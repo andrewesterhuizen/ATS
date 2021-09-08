@@ -1,3 +1,6 @@
 gerbers/
 .vscode
 vcv
+*.elf
+*.hex
+*.o

@@ -40,6 +40,8 @@ void TimerManager::setBPM(uint32_t bpm, bool tap = false)
 
     _samplesPerBeat = (MS_IN_MINUTE * SAMPLES_PER_MS) / _bpm;
     _samplesPerTick = _samplesPerBeat / PPQN;
+
+    reset();
 }
 
 void TimerManager::tick()
