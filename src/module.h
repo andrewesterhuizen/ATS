@@ -9,17 +9,17 @@ class Module
 {
 private:
     uint8_t count;
-    uint8_t countLimit = PPQN * 10; // this could overflow if we update the ppqn
+    uint8_t count_limit = PPQN * 10; // this could overflow if we update the ppqn
     uint8_t ppqn;
 
-    uint8_t currentEngineIndex;
+    uint8_t current_engine_index;
     Engine *engines[NUM_ENGINES];
-    DividerEngine dividerEngine;
-    MultiplierEngine multiplierEngine;
+    DividerEngine divider_engine;
+    MultiplierEngine multiplier_engine;
 
-    Engine *currentEngine()
+    Engine *current_engine()
     {
-        return engines[currentEngineIndex];
+        return engines[current_engine_index];
     }
 
 public:
@@ -32,29 +32,29 @@ public:
         count = 0;
         state = 0;
 
-        currentEngineIndex = 0;
-        engines[0] = &dividerEngine;
-        engines[1] = &multiplierEngine;
+        current_engine_index = 0;
+        engines[0] = &divider_engine;
+        engines[1] = &multiplier_engine;
     }
 
-    void setEngine(uint8_t index)
+    void set_engine(uint8_t index)
     {
-        currentEngineIndex = index;
+        current_engine_index = index;
     }
 
-    void setX(uint8_t value)
+    void set_x(uint8_t value)
     {
-        currentEngine()->setX(value);
+        current_engine()->set_x(value);
     }
 
-    void setY(uint8_t value)
+    void set_y(uint8_t value)
     {
-        currentEngine()->setY(value);
+        current_engine()->set_y(value);
     }
 
     void tick()
     {
-        currentEngine()->tick(count, &state);
+        current_engine()->tick(count, &state);
 
         count++;
         if (count == (ppqn * 5))

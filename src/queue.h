@@ -3,51 +3,49 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-template <typename T>
+template <typename T, uint8_t capacity = 16>
 class Queue
 {
 public:
-    Queue(uint8_t _capacity = 16)
+    Queue()
     {
-        capacity = _capacity;
-        nItems = 0;
+        n_items = 0;
         front = 0;
         rear = 0;
         items = (T *)malloc(capacity * sizeof(T));
     }
 
-    bool isEmpty()
+    bool is_empty()
     {
-        return nItems == 0;
+        return n_items == 0;
     }
 
     void enqueue(T item)
     {
-        if (nItems == capacity)
+        if (n_items == capacity)
             return;
 
         items[rear] = item;
         rear = (rear + 1) % capacity;
-        nItems++;
+        n_items++;
     }
 
     T dequeue()
     {
-        if (isEmpty())
+        if (is_empty())
         {
             return T{};
         }
 
         T item = items[front];
         front = (front + 1) % capacity;
-        nItems--;
+        n_items--;
         return item;
     }
 
 private:
     uint8_t front;
     uint8_t rear;
-    uint8_t nItems;
-    uint8_t capacity;
+    uint8_t n_items;
     T *items;
 };

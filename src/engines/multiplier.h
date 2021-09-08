@@ -15,13 +15,13 @@ public:
     {
     }
 
-    virtual void setX(uint8_t value)
+    virtual void set_x(uint8_t value)
     {
         uint8_t scaledValue = ((value * 9) / 255) + 1; // between 1 and 10
         shift = scaledValue;
     }
 
-    virtual void setY(uint8_t value)
+    virtual void set_y(uint8_t value)
     {
         uint8_t scaledValue = ((value * 9) / 255) + 1; // between 1 and 10
         stretch = scaledValue;

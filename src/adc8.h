@@ -1,5 +1,4 @@
-#ifndef ADC8_H
-#define ADC8_H
+#pragma once
 
 #include <stdint.h>
 #include <avr/io.h>
@@ -30,5 +29,3 @@ uint8_t ADC8::read(uint8_t pin)
 
     return ADCH;
 }
-
-#endif // ADC8_H

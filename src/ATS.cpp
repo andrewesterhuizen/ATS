@@ -17,34 +17,34 @@ extern "C" void __cxa_pure_virtual()
         ;
 }
 
-PulseGenerator outputPulses[NUM_OUTPUTS];
-TimerManager timerManager;
+PulseGenerator output_pulses[NUM_OUTPUTS];
+TimerManager timer_manager;
 Module m;
-InputHandler inputHandler;
-OutputHandler outputHandler;
-bool uiHandled = true;
+InputHandler input_handler;
+OutputHandler output_handler;
+bool ui_handled = true;
 
 // every 1ms, used for reading from and writing to ui
 ISR(TIMER0_COMPA_vect)
 {
-    uiHandled = false;
+    ui_handled = false;
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-    timerManager.tick();
+    timer_manager.tick();
 
     // check if time to update clock
-    if (timerManager.nextBeat())
+    if (timer_manager.next_beat())
     {
         m.tick();
-        uint8_t moduleState = m.state;
+        uint8_t output_state = m.state;
 
         for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
         {
-            if (moduleState & (1 << i))
+            if (output_state & (1 << i))
             {
-                outputPulses[i].trigger();
+                output_pulses[i].trigger();
             }
         }
     }
@@ -52,7 +52,7 @@ ISR(TIMER1_COMPA_vect)
     // output pulses to GPIO ports
     for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
     {
-        outputHandler.updateOuput(i, outputPulses[i].update());
+        output_handler.update_output(i, output_pulses[i].update());
     }
 }
 
@@ -71,11 +71,11 @@ void init()
     DDRD &= ~(1 << 6); // jack
     PORTD |= (1 << 6); // enable pull up
 
-    inputHandler.init();
+    input_handler.init();
 
     // init clock
     m.init();
-    m.setEngine(0);
+    m.set_engine(0);
 
     cli();
 
@@ -105,51 +105,51 @@ int main()
 
     while (1)
     {
-        if (!uiHandled)
+        if (!ui_handled)
         {
-            inputHandler.update();
+            input_handler.update();
 
             for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
             {
-                outputHandler.updateLED(i, outputPulses[i].isActive());
+                output_handler.update_led(i, output_pulses[i].is_active());
             }
 
-            uiHandled = true;
+            ui_handled = true;
         }
 
         // handle ui events
-        while (inputHandler.hasEvents())
+        while (input_handler.has_events())
         {
-            UIEvent event = inputHandler.getEvent();
+            UIEvent event = input_handler.get_event();
             switch (event.input)
             {
             case InputX:
                 if (event.shift)
                 {
-                    timerManager.setBPM(event.value);
+                    timer_manager.set_bpm(event.value);
                 }
                 else
                 {
-                    m.setX(event.value);
+                    m.set_x(event.value);
                 }
                 break;
             case InputY:
                 if (event.shift)
                 {
-                    uint8_t engineIndex = (event.value * NUM_ENGINES) / 255;
-                    m.setEngine(engineIndex);
+                    uint8_t engine_index = (event.value * NUM_ENGINES) / 255;
+                    m.set_engine(engine_index);
                 }
                 else
                 {
-                    m.setY(event.value);
+                    m.set_y(event.value);
                 }
                 break;
             case ButtonRelease:
                 if (event.value > 0)
                 {
-                    uint16_t newBPM = MS_IN_MINUTE / event.value;
-                    uint8_t bpm = clamp(newBPM);
-                    timerManager.setBPM(bpm);
+                    uint16_t new_bpm = MS_IN_MINUTE / event.value;
+                    uint8_t bpm = clamp(new_bpm);
+                    timer_manager.set_bpm(bpm);
                 }
 
                 break;

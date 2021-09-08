@@ -11,7 +11,7 @@ private:
     uint8_t _pulseLengthSamples = (SAMPLE_RATE / 1000) * _pulseLengthMs;
 
 public:
-    bool isActive();
+    bool is_active();
     bool update();
     void trigger();
 };
@@ -35,7 +35,7 @@ bool PulseGenerator::update()
     return false;
 }
 
-bool PulseGenerator::isActive()
+bool PulseGenerator::is_active()
 {
     return _remaining > 0;
 }

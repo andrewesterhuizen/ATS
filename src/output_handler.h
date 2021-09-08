@@ -5,45 +5,45 @@
 
 class OutputHandler
 {
-    int jackpins[5] = {0, 4, 1, 2, 3};
-    int ledpins[5] = {7, 3, 0, 1, 2};
+    int jack_pins[5] = {0, 4, 1, 2, 3};
+    int led_pins[5] = {7, 3, 0, 1, 2};
 
 public:
-    void updateOuput(uint8_t n, bool active)
+    void update_output(uint8_t n, bool active)
     {
         if (active)
         {
-            PORTD |= 1 << jackpins[n];
+            PORTD |= 1 << jack_pins[n];
         }
         else
         {
-            PORTD &= ~(1 << jackpins[n]);
+            PORTD &= ~(1 << jack_pins[n]);
         }
     }
 
-    void updateLED(uint8_t n, bool active)
+    void update_led(uint8_t n, bool active)
     {
         if (active)
         {
             // input 0 is on a different output port :(
             if (n == 0)
             {
-                PORTD |= 1 << ledpins[n];
+                PORTD |= 1 << led_pins[n];
             }
             else
             {
-                PORTC |= 1 << ledpins[n];
+                PORTC |= 1 << led_pins[n];
             }
         }
         else
         {
             if (n == 0)
             {
-                PORTD &= ~(1 << ledpins[n]);
+                PORTD &= ~(1 << led_pins[n]);
             }
             else
             {
-                PORTC &= ~(1 << ledpins[n]);
+                PORTC &= ~(1 << led_pins[n]);
             }
         }
     }

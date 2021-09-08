@@ -8,7 +8,7 @@ class Debouncer
 public:
     uint8_t shift = 0;
 
-    bool isActive()
+    bool is_active()
     {
         if (!inverted)
         {
@@ -21,6 +21,6 @@ public:
     bool update(uint8_t value)
     {
         shift = (shift << 1) | value;
-        return isActive();
+        return is_active();
     };
 };

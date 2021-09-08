@@ -1,5 +1,4 @@
-#ifndef PIN_DEFINES_H
-#define PIN_DEFINES_H
+#pragma once
 
 #define CLOCK_PORT PORTB
 #define CLOCK_DATA_DIRECTION DDRB
@@ -12,5 +11,3 @@
 #define BPM_POT_INPUT_PIN 0
 #define FUNC_A_POT_INPUT_PIN 1
 #define FUNC_B_POT_INPUT_PIN 2
-
-#endif // PIN_DEFINES_H

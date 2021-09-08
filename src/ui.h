@@ -27,28 +27,26 @@ class InputHandler
 {
     ADC8 adc;
 
-    Queue<UIEvent> eventQueue;
+    Queue<UIEvent> event_queue;
 
-    Debouncer<true> tapButtonHandler;
-    Debouncer<true> jackInputHandler;
+    Debouncer<true> tap_button_handler;
+    Debouncer<true> jack_input_handler;
 
-    uint8_t lastX = 0;
-    uint8_t lastY = 0;
-    bool lastButtonState = false;
-    bool lastJackState = false;
+    uint8_t last_x = 0;
+    uint8_t last_y = 0;
+    bool last_button_state = false;
+    bool last_jack_state = false;
 
-    uint8_t tapButtonReading = 0;
-    uint8_t jackInputReading = 0;
+    uint8_t tap_button_reading = 0;
+    uint8_t jack_input_reading = 0;
 
-    bool processTap = false;
-    bool waitingForNextTap = false;
-    uint16_t msSinceLastTap = 0;
-    uint8_t tapJackReading = 0;
+    bool waiting_for_next_tap = false;
+    uint16_t ms_since_last_tap = 0;
 
-    uint8_t buttonPressCooldown = 0;
+    uint8_t button_press_cooldown = 0;
 
-    bool buttonDownInLastUpdate = false;
-    uint16_t timeSinceLastButtonRelease = 0;
+    bool button_down_in_last_update = false;
+    uint16_t time_since_last_button_release = 0;
 
 public:
     void init()
@@ -58,94 +56,94 @@ public:
 
     void update()
     {
-        tapButtonReading = (PIND >> 5) & 1;
-        jackInputReading = (PIND >> 6) & 1;
+        tap_button_reading = (PIND >> 5) & 1;
+        jack_input_reading = (PIND >> 6) & 1;
 
-        bool tapButtonActive = tapButtonHandler.update(tapButtonReading);
-        bool jackInputActive = jackInputHandler.update(jackInputReading);
+        bool tap_button_active = tap_button_handler.update(tap_button_reading);
+        bool jack_input_active = jack_input_handler.update(jack_input_reading);
 
-        timeSinceLastButtonRelease++;
+        time_since_last_button_release++;
 
-        bool buttonReleased = buttonDownInLastUpdate && !tapButtonActive;
+        bool buttonReleased = button_down_in_last_update && !tap_button_active;
         if (buttonReleased)
         {
-            eventQueue.enqueue(UIEvent{ButtonRelease, timeSinceLastButtonRelease + 8});
-            timeSinceLastButtonRelease = 0;
+            event_queue.enqueue(UIEvent{ButtonRelease, time_since_last_button_release + 8});
+            time_since_last_button_release = 0;
         }
 
-        buttonDownInLastUpdate = tapButtonActive;
+        button_down_in_last_update = tap_button_active;
 
-        if (buttonPressCooldown > 0)
+        if (button_press_cooldown > 0)
         {
-            buttonPressCooldown--;
+            button_press_cooldown--;
         }
 
-        if (waitingForNextTap)
+        if (waiting_for_next_tap)
         {
-            msSinceLastTap++;
+            ms_since_last_tap++;
 
             // max wait 2s
-            if (msSinceLastTap > 2000)
+            if (ms_since_last_tap > 2000)
             {
-                waitingForNextTap = false;
-                msSinceLastTap = 0;
+                waiting_for_next_tap = false;
+                ms_since_last_tap = 0;
             }
         }
 
-        if (buttonPressCooldown == 0 && tapButtonActive && !lastButtonState)
+        if (button_press_cooldown == 0 && tap_button_active && !last_button_state)
         {
-            buttonPressCooldown = 200;
+            button_press_cooldown = 200;
 
-            if (waitingForNextTap)
+            if (waiting_for_next_tap)
             {
-                waitingForNextTap = false;
-                uint16_t newBPM = MS_IN_MINUTE / msSinceLastTap;
+                waiting_for_next_tap = false;
+                uint16_t newBPM = MS_IN_MINUTE / ms_since_last_tap;
                 uint8_t newBPM8 = newBPM > 255 ? 255 : newBPM;
-                eventQueue.enqueue(UIEvent{Tap, newBPM8});
+                event_queue.enqueue(UIEvent{Tap, newBPM8});
             }
             else
             {
-                waitingForNextTap = true;
-                msSinceLastTap = 0;
+                waiting_for_next_tap = true;
+                ms_since_last_tap = 0;
             }
         }
 
-        if (tapButtonActive != lastButtonState)
+        if (tap_button_active != last_button_state)
         {
-            eventQueue.enqueue(UIEvent{InputButton, tapButtonActive});
-            lastButtonState = tapButtonActive;
+            event_queue.enqueue(UIEvent{InputButton, tap_button_active});
+            last_button_state = tap_button_active;
         }
 
-        if (jackInputActive != lastJackState)
+        if (jack_input_active != last_jack_state)
         {
-            eventQueue.enqueue(UIEvent{InputJack, jackInputActive});
-            lastJackState = jackInputActive;
+            event_queue.enqueue(UIEvent{InputJack, jack_input_active});
+            last_jack_state = jack_input_active;
         }
 
         uint8_t x = 255 - adc.read(FUNC_A_POT_INPUT_PIN);
         uint8_t y = 255 - adc.read(FUNC_B_POT_INPUT_PIN);
 
-        if (x != lastX)
+        if (x != last_x)
         {
-            eventQueue.enqueue(UIEvent{InputX, x, tapButtonActive});
+            event_queue.enqueue(UIEvent{InputX, x, tap_button_active});
         }
 
-        if (y != lastY)
+        if (y != last_y)
         {
-            eventQueue.enqueue(UIEvent{InputY, y, tapButtonActive});
+            event_queue.enqueue(UIEvent{InputY, y, tap_button_active});
         }
 
-        lastX = x;
-        lastY = y;
+        last_x = x;
+        last_y = y;
     }
 
-    bool hasEvents()
+    bool has_events()
     {
-        return !eventQueue.isEmpty();
+        return !event_queue.is_empty();
     }
 
-    UIEvent getEvent()
+    UIEvent get_event()
     {
-        return eventQueue.dequeue();
+        return event_queue.dequeue();
     }
 };
