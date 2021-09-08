@@ -4,3 +4,4 @@ vcv
 *.elf
 *.hex
 *.o
+.DS_Store
